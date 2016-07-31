@@ -1,10 +1,6 @@
 package com.seneca.appiumassessment.flipkart.listeners;
 
 
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
@@ -12,8 +8,8 @@ import org.testng.TestListenerAdapter;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+import com.seneca.appiumassessment.flipkart.pageobject.AbstractPageObject;
 
-import java.io.File;
 import java.io.IOException;
 
 public class TestListener extends TestListenerAdapter {
@@ -37,14 +33,18 @@ public class TestListener extends TestListenerAdapter {
 	
 	@Override
 	public void onTestFailure(ITestResult tr) {
+		String filename = tr.getMethod().getMethodName()+System.currentTimeMillis()+".jpg";
 		super.onTestFailure(tr);
 		System.out.println("Inside Test Failure Method");
 		test.log(LogStatus.ERROR, tr.getThrowable().getMessage());
-		//test.log(LogStatus.INFO, "");
-		//test.addScreenCapture(System.getProperty("User.dir")+"\\Screenshots\\"+tr.getTestName()+System.currentTimeMillis()+".png");
-		//takeScreenshot(getWebDriver(), tr.getTestName());
-		String imagepath = test.addScreenCapture(System.getProperty("user.dir")+"\\ErrorMessage.jpg");
-		test.log(LogStatus.INFO, "Screenshot of the Page when this test failed.."+imagepath);
+		try {
+			AbstractPageObject.takescreenshot(filename);
+			String imagepath = test.addScreenCapture(System.getProperty("user.dir")+"\\Screenshots\\"+filename);
+			test.log(LogStatus.INFO, "Screenshot of the Page when this test failed.."+imagepath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		report.endTest(test);
 	}
 	
@@ -67,7 +67,7 @@ public class TestListener extends TestListenerAdapter {
 		report.close();
 	}
 	
-	public void takeScreenshot(WebDriver driver, String testname){
+	/*public void takeScreenshot(WebDriver driver, String testname){
 		
 		File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 		File destFile = new File(System.getProperty("User.dir")+"\\Screenshots\\"+testname+System.currentTimeMillis()+".png");
@@ -77,7 +77,7 @@ public class TestListener extends TestListenerAdapter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public static ExtentTest getTest() {
 		return test;
