@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+  
+<suite name="TestSuite" verbose="1" >
+    <listeners>
+        <listener class-name="com.seneca.appiumassessment.flipkart.listeners.TestListener"/>
+    </listeners>
+    <test name="RegressionTests">
+        <classes>
+            <class name="com.seneca.appiumassessment.flipkart.tests.SampleTest"/>
+        </classes>
+    </test>
+    <!-- <test name="SmokeTests">
+        <classes>
+            <class name="com.seneca.appiumassessment.flipkart.tests.SampleTest"/>
+        </classes>
+    </test> -->
+</suite>
