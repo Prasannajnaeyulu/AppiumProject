@@ -6,7 +6,7 @@
     </listeners>
     <test name="RegressionTests">
         <classes>
-            <class name="com.seneca.appiumassessment.flipkart.tests.SampleTest"/>
+            <class name="com.seneca.appiumassessment.flipkart.tests.FlipkartHomePageTests"/>
         </classes>
     </test>
     <!-- <test name="SmokeTests">

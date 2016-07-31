@@ -18,11 +18,12 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 
 public abstract class AbstractPageObject {
-	private static AppiumDriver<AndroidElement> driver;
+	protected static AppiumDriver<AndroidElement> driver;
 	private static Logger logger = Logger.getLogger(AbstractPageObject.class);
 	public static boolean isAppOpen = false;
 
@@ -54,15 +55,16 @@ public abstract class AbstractPageObject {
 
 	public void createDriver() throws MalformedURLException{
 		if(!isAppOpen){
-			File classpathRoot = new File(System.getProperty("user.dir"));
-			File appDir = new File(classpathRoot, "../../../apps/ContactManager");
-			File app = new File(appDir, "ContactManager.apk");
+			//File classpathRoot = new File(System.getProperty("user.dir"));
+			//File appDir = new File(classpathRoot, "../../../apps/ContactManager");
+			//File app = new File(appDir, "ContactManager.apk");
 			DesiredCapabilities capabilities = new DesiredCapabilities();
-			capabilities.setCapability("deviceName","Android Emulator");
-			capabilities.setCapability("platformVersion", "4.4");
-			capabilities.setCapability("app", app.getAbsolutePath());
-			capabilities.setCapability("appPackage", "com.example.android.contactmanager");
-			capabilities.setCapability("appActivity", ".ContactManager");
+			capabilities.setCapability("deviceName","Android Samsung Mobile");
+			capabilities.setCapability("platformVersion", "5.1.1");
+			capabilities.setCapability("platformName", "Android");
+			//capabilities.setCapability("app", app.getAbsolutePath());
+			capabilities.setCapability("appPackage", "com.flipkart.android");
+			capabilities.setCapability("appActivity", ".SplashActivity");
 			driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
 			isAppOpen = true;
 		}
@@ -74,7 +76,7 @@ public abstract class AbstractPageObject {
 		return waitForElement(bylocator, 30);
 	}
 
-	public WebElement waitForElementVisibility(By bylocator){
+	public AndroidElement waitForElementVisibility(By bylocator){
 		return waitForElementVisibility(bylocator, 30);
 	}
 
@@ -91,18 +93,20 @@ public abstract class AbstractPageObject {
 		return we;
 	}
 
-	public WebElement waitForElementVisibility(By bylocator, int timeunitinseconds){
-		WebElement we=null;
+	public AndroidElement waitForElementVisibility(By bylocator, int timeunitinseconds){
+		AndroidElement androidelement=null;
 		WebDriverWait wait = new WebDriverWait(driver,timeunitinseconds);
 
 		try{
-			we = wait.until(ExpectedConditions.visibilityOfElementLocated(bylocator));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(bylocator));
+			androidelement = driver.findElement(bylocator);
 		}
 		catch(Exception e){
 			logger.error("Element not visible in the given time"+timeunitinseconds);
 		}
-		return we;
+		return androidelement;
 	}
+	
 	public WebElement waitForElementToBeClickable(By bylocator, int timeunitinseconds){
 		WebElement we=null;
 		WebDriverWait wait = new WebDriverWait(driver,timeunitinseconds);
@@ -124,6 +128,7 @@ public abstract class AbstractPageObject {
 		if(we!=null)
 			we.click();
 	}
+	
 	public void typeEditBox(String editboxidentifier, String texttotype){
 		String xpath = "//input[@id='"+editboxidentifier+"' or @name='"+editboxidentifier+"']";
 		WebElement editbox = waitForElementVisibility(By.xpath(xpath));
@@ -138,6 +143,11 @@ public abstract class AbstractPageObject {
 			return;
 		}
 	}
+	
+	public static void tapOn(WebElement element){
+        new TouchAction(driver).tap(element).perform();
+    }
+	
 
 	public void clickButton(String buttonidentifier){
 		String xpath = "//button[@id='"+buttonidentifier+"' or text()='"+buttonidentifier+"']";
