@@ -12,6 +12,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -52,6 +53,7 @@ public abstract class AbstractPageObject {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public void createDriver() throws MalformedURLException{
 		if(!isAppOpen){
@@ -170,6 +172,16 @@ public abstract class AbstractPageObject {
 			select.selectByVisibleText(valuetoselect);
 		}
 	}
+	
+	public void moveToElement(AndroidElement element){
+		Actions actions = new Actions(driver);
+		actions.moveToElement(element);
+		actions.build().perform();
+	}
+	
+	public void scrollToView(String elementText){
+		driver.scrollTo(elementText);
+	}
 
 	public boolean isTextPresent(String texttofind){
 		int count=0;
@@ -190,7 +202,7 @@ public abstract class AbstractPageObject {
 
 	public static void quit() {
 		// TODO Auto-generated method stub
-		logger.info("inside quite method...");
+		logger.info("inside quit method...");
 		driver.quit();
 		isAppOpen = false;
 	}

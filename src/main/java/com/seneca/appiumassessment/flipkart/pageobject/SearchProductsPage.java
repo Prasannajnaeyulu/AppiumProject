@@ -14,7 +14,7 @@ public class SearchProductsPage extends AbstractPageObject {
 
 	@Override
 	public void assertInPage() {
-		WebElement sortbutton = waitForElementToBeClickable(By.id("sort_by_image"));
+		WebElement sortbutton = waitForElementToBeClickable(By.xpath("//android.widget.TextView[@text='Sort']"));
 		Assert.assertNotNull(sortbutton, "Unable to navigate to Search Page");
 	}
 
